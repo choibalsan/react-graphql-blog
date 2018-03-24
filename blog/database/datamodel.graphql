@@ -14,7 +14,7 @@ type User {
   password: String!
   name: String!
   posts: [Post!]!
-  
+  # custom fields
   type: Role! @default(value: Role.Guest)
 }
 
