@@ -14,4 +14,11 @@ type User {
   password: String!
   name: String!
   posts: [Post!]!
+  
+  type: Role! @default(value: Role.Guest)
+}
+
+enum Role{
+  Admin
+  Guest
 }
