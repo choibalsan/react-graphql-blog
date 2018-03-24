@@ -27,6 +27,35 @@ const post = {
     )
   },
 
+  async editPost(parent, {id, title, text, isPublished = false }, ctx, info) {
+    const userId = getUserId(ctx)
+    const isAdminUser = await ctx.db.exists.User({
+      id: userId,
+      type: "Admin"
+    });
+    console.log(isAdminUser);
+    if(!isAdminUser) {
+      throw new Error('no such admin user');
+    }
+    // 
+    return ctx.db.mutation.updatePost(
+      {
+        data: {
+          title,
+          text,
+          isPublished,
+          author: {
+            connect: { id: userId },
+          },
+        },
+        where:{
+          id: id,
+        }
+      },
+      info
+    )
+  },
+
   async publish(parent, { id }, ctx, info) {
     const userId = getUserId(ctx)
     const postExists = await ctx.db.exists.Post({
