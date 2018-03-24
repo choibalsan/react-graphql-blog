@@ -21,6 +21,7 @@ type User implements Node {
   password: String!
   name: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  type: Role!
 }
 
 
@@ -497,6 +498,11 @@ type Query {
   id: ID!): Node
 }
 
+enum Role {
+  Admin
+  Guest
+}
+
 type Subscription {
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
@@ -521,6 +527,7 @@ input UserCreateInput {
   email: String!
   password: String!
   name: String!
+  type: Role
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -533,6 +540,7 @@ input UserCreateWithoutPostsInput {
   email: String!
   password: String!
   name: String!
+  type: Role
 }
 
 """
@@ -558,6 +566,8 @@ enum UserOrderByInput {
   password_DESC
   name_ASC
   name_DESC
+  type_ASC
+  type_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -569,6 +579,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   name: String!
+  type: Role!
 }
 
 type UserSubscriptionPayload {
@@ -610,6 +621,7 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
+  type: Role
   posts: PostUpdateManyWithoutAuthorInput
 }
 
@@ -625,6 +637,7 @@ input UserUpdateWithoutPostsDataInput {
   email: String
   password: String
   name: String
+  type: Role
 }
 
 input UserUpsertWithoutPostsInput {
@@ -853,6 +866,19 @@ input UserWhereInput {
   All values not ending with the given string.
   """
   name_not_ends_with: String
+  type: Role
+  """
+  All values that are not equal to given value.
+  """
+  type_not: Role
+  """
+  All values that are contained in given list.
+  """
+  type_in: [Role!]
+  """
+  All values that are not contained in given list.
+  """
+  type_not_in: [Role!]
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
